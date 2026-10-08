@@ -1,26 +1,33 @@
-providers = {
-    "1": "Google",
-    "2": "Groq",
-    "3": "Local Qwen"
-}
+import json
+import os
+
+CONFIG_FILE = "config.json"
+
+def load_config():
+    if not os.path.exists(CONFIG_FILE):
+        config = {
+            "google": {
+                "api_keys": []
+            },
+            "groq": {
+                "api_keys": []
+            }
+        }
+
+        with open(CONFIG_FILE, "w") as file:
+            json.dump(config, file, indent=4)
+
+        return config
+
+    with open(CONFIG_FILE, "r") as file:
+        return json.load(file)
+
+
+config = load_config()
 
 print("AI Router")
+print("\nConfigured providers:")
 
-prompt = input("\nEnter your request: ")
-
-print("\nChoose a provider:")
-
-for number, provider in providers.items():
-    print(f"{number}. {provider}")
-
-choice = input("\nEnter provider number: ")
-
-if choice in providers:
-    provider = providers[choice]
-
-    print(f"\nSending request to {provider}...")
-    print(f"\n[{provider}] Received your request:")
-    print(prompt)
-
-else:
-    print("\nInvalid provider selection.")
+for provider, details in config.items():
+    key_count = len(details["api_keys"])
+    print(f"- {provider}: {key_count} API key(s)")
