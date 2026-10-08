@@ -1,6 +1,9 @@
 import json
 import os
 
+from providers.groq_provider import send_to_groq
+
+
 CONFIG_FILE = "config.json"
 
 DEFAULT_CONFIG = {
@@ -106,6 +109,42 @@ def manage_api_keys(config):
                 print("Invalid choice.")
 
 
+def start_router(config):
+    prompt = input("\nEnter your request: ")
+
+    print("\nChoose a provider:")
+    print("1. Groq")
+    print("2. Google")
+    print("3. Local Qwen")
+
+    choice = input("\nEnter provider number: ")
+
+    if choice == "1":
+        keys = config["groq"]["api_keys"]
+
+        if not keys:
+            print("\nNo Groq API keys configured.")
+            return
+
+        try:
+            response = send_to_groq(prompt, keys[0])
+            print("\nGroq response:")
+            print(response)
+
+        except Exception as error:
+            print("\nGroq request failed.")
+            print(error)
+
+    elif choice == "2":
+        print("\nGoogle provider will be added next.")
+
+    elif choice == "3":
+        print("\nLocal Qwen will be added later.")
+
+    else:
+        print("\nInvalid provider selection.")
+
+
 def main():
     config = load_config()
 
@@ -121,7 +160,7 @@ def main():
             manage_api_keys(config)
 
         elif choice == "2":
-            print("\nRouter will be connected to AI providers in the next step.")
+            start_router(config)
 
         elif choice == "3":
             print("Goodbye.")
