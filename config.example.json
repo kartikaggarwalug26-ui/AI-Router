@@ -1,8 +1,11 @@
 {
-    "google": {
+    "groq": {
         "api_keys": []
     },
-    "groq": {
+    "mistral": {
+        "api_keys": []
+    },
+    "google": {
         "api_keys": []
     }
 }
